@@ -7,7 +7,7 @@ const userSchema = new Schema(
     // Okta SSO later: store Okta `sub` here and issue the same JWT cookie after OIDC.
     oktaSub: { type: String, sparse: true, unique: true },
   },
-  { timestamps: true },
+  { timestamps: true, collection: "viabrainUsers" },
 );
 
 export type UserDoc = InferSchemaType<typeof userSchema> & {
