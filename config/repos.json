@@ -1,0 +1,13 @@
+[
+  { "id": "viaconsole", "fullName": "stewopf/viaconsole", "defaultBranch": "main" },
+  { "id": "viamerchantapp2.0", "fullName": "stewopf/viamerchantapp2.0", "defaultBranch": "main" },
+  { "id": "viacore", "fullName": "stewopf/viacore", "defaultBranch": "main" },
+  { "id": "viaassistant", "fullName": "stewopf/viaassistant", "defaultBranch": "main" },
+  { "id": "viadomain", "fullName": "stewopf/viadomain", "defaultBranch": "main" },
+  { "id": "bhs", "fullName": "stewopf/bhs", "defaultBranch": "main" },
+  { "id": "viagenai", "fullName": "stewopf/viagenai", "defaultBranch": "main" },
+  { "id": "vianotificationcenter", "fullName": "stewopf/vianotificationcenter", "defaultBranch": "main" },
+  { "id": "viasocketserver", "fullName": "stewopf/viasocketserver", "defaultBranch": "main" },
+  { "id": "viaphotolibrary", "fullName": "stewopf/viaphotolibrary", "defaultBranch": "main" },
+  { "id": "viavideos", "fullName": "stewopf/viavideos", "defaultBranch": "main" }
+]

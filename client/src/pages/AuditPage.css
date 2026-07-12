@@ -1,0 +1,50 @@
+.audit-table-wrap {
+  padding: 0;
+  overflow: auto;
+  margin-top: 1rem;
+}
+
+.audit-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.audit-table th,
+.audit-table td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  vertical-align: top;
+}
+
+.audit-table th {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--opf-text-muted);
+  background: var(--gray-50);
+}
+
+.sha-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sha-chip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  background: var(--opf-blue-xlight);
+  color: var(--opf-navy);
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+}
+
+@media (max-width: 720px) {
+  .audit-table th,
+  .audit-table td {
+    padding: 0.65rem 0.75rem;
+  }
+}

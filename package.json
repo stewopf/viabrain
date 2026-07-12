@@ -1,0 +1,20 @@
+{
+  "name": "viabrain",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VIA Project — read-only multi-repo code chat powered by Cursor SDK",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w server",
+    "dev:server": "npm run dev -w server",
+    "dev:client": "npm run dev -w client",
+    "build": "npm run build -w client && npm run build -w server && node scripts/verify-build.mjs",
+    "start": "node scripts/start.mjs"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

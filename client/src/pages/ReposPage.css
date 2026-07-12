@@ -1,0 +1,213 @@
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.repo-card h3 {
+  font-size: 1.05rem;
+  font-weight: 750;
+  color: var(--opf-navy);
+}
+
+.repo-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.repo-card.is-syncing {
+  border-color: var(--opf-blue-light);
+  box-shadow:
+    var(--shadow-sm),
+    0 0 0 3px rgba(2, 87, 184, 0.08);
+}
+
+.repo-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.repo-status.ok {
+  background: #ecf7dc;
+  color: #14532d;
+}
+
+.repo-status.error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.repo-status.syncing {
+  background: var(--opf-blue-xlight);
+  color: var(--opf-blue-ui);
+}
+
+.repo-meta {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1rem 0 1.15rem;
+}
+
+.repo-meta dt {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--opf-text-muted);
+}
+
+.repo-meta dd {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--opf-navy);
+}
+
+.repo-meta code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.repo-error {
+  font-size: 0.82rem;
+  color: #b91c1c;
+  margin-bottom: 0.85rem;
+}
+
+.repo-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.repo-card-actions .btn {
+  text-decoration: none;
+}
+
+.sync-progress {
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-color: var(--opf-blue-light);
+  background: linear-gradient(
+    180deg,
+    var(--opf-blue-xlight) 0%,
+    var(--white) 55%
+  );
+}
+
+.sync-progress-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.sync-progress-label {
+  margin: 0 0 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--opf-blue-ui);
+}
+
+.sync-progress-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--opf-navy);
+}
+
+.sync-progress-count {
+  font-size: 1.15rem;
+  color: var(--opf-navy);
+  white-space: nowrap;
+}
+
+.sync-progress-count strong {
+  font-weight: 800;
+}
+
+.sync-progress-count span {
+  color: var(--opf-text-muted);
+  font-weight: 600;
+}
+
+.sync-progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(1, 53, 114, 0.08);
+  overflow: hidden;
+}
+
+.sync-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--opf-blue-ui) 0%,
+    var(--opf-accent) 100%
+  );
+  transition: width 0.35s ease;
+}
+
+.sync-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.65rem;
+}
+
+.sync-progress-pct {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--opf-navy);
+}
+
+.btn-with-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(1, 53, 114, 0.18);
+  border-top-color: var(--opf-blue-ui);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .sync-progress-head {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .repo-card-actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-width: calc(50% - 0.25rem);
+  }
+
+  .repo-meta code {
+    word-break: break-all;
+  }
+}

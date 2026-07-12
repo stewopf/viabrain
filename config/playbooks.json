@@ -1,0 +1,44 @@
+[
+  {
+    "id": "architecture",
+    "title": "Architecture overview",
+    "category": "Architecture",
+    "description": "System boundaries, service roles, and how the selected repos fit together.",
+    "prompt": "Provide a PE technical diligence architecture overview of the selected repositories.\n\nCover:\n1. Purpose of each repo and its role in the product\n2. Major runtime components (APIs, workers, UIs, shared libs)\n3. How services communicate (HTTP, queues, sockets, shared DB)\n4. External dependencies and third-party platforms\n5. Deployment / environment assumptions visible in the code\n\nCite concrete file paths. Flag uncertainties explicitly. Do not propose code changes."
+  },
+  {
+    "id": "security",
+    "title": "Security review",
+    "category": "Security",
+    "description": "AuthN/Z, secrets handling, injection surfaces, and data exposure risks.",
+    "prompt": "Perform a read-only security review of the selected repositories for PE diligence.\n\nAssess:\n1. Authentication and authorization patterns\n2. Secret / credential handling\n3. Input validation and injection risks\n4. Sensitive data flows (PII, payments, tokens)\n5. Notable insecure defaults or missing controls\n\nFor each finding: severity (High/Med/Low), evidence (file path), and business impact. Cite sources. No code edits."
+  },
+  {
+    "id": "data-flow",
+    "title": "Data flow & persistence",
+    "category": "Data",
+    "description": "Where data lives, how it moves, and retention/ownership signals.",
+    "prompt": "Map data flows across the selected repositories.\n\nInclude:\n1. Primary data stores (Mongo, SQL, S3, caches, etc.)\n2. Key entities / collections and owning services\n3. Inbound/outbound integrations that move customer or payment data\n4. Logging / analytics destinations if visible\n5. Data residency or multi-tenant isolation clues\n\nCite files. Call out unknowns. Read-only analysis only."
+  },
+  {
+    "id": "ops",
+    "title": "Ops & reliability",
+    "category": "Operations",
+    "description": "Deployability, observability, failure modes, and operational maturity.",
+    "prompt": "Assess operational maturity of the selected repositories for PE diligence.\n\nCover:\n1. Build / deploy / CI signals in-repo\n2. Health checks, metrics, logging, tracing\n3. Retry, timeout, and failure-handling patterns\n4. Background jobs / cron / queues\n5. Obvious single points of failure\n\nCite evidence. Distinguish confirmed vs inferred. No changes."
+  },
+  {
+    "id": "vendor-lockin",
+    "title": "Vendor lock-in",
+    "category": "Risk",
+    "description": "Third-party platforms that would be costly to replace.",
+    "prompt": "Identify vendor lock-in and concentration risk in the selected repositories.\n\nList major third-party dependencies (cloud, auth, payments, messaging, AI, media, etc.). For each: where used, how deeply embedded, and switching difficulty (High/Med/Low) with rationale. Cite files. Read-only."
+  },
+  {
+    "id": "key-person",
+    "title": "Key-person & maintainability",
+    "category": "Risk",
+    "description": "Bus factor, undocumented complexity, and maintainability risks.",
+    "prompt": "Assess key-person and maintainability risk from the codebase alone.\n\nLook for:\n1. Highly concentrated complexity (god modules, sparse docs)\n2. Custom frameworks / one-off patterns\n3. Missing tests around critical paths\n4. Undocumented operational runbooks implied by code\n5. Areas that would be hard for a new team to own quickly\n\nCite files. Be explicit about confidence. Ask/read-only only."
+  }
+]

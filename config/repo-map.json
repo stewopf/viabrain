@@ -1,0 +1,86 @@
+{
+  "title": "VIA platform cross-repo map",
+  "summary": "Curated view of how the stewopf VIA repositories relate for PE technical review. Edges are product-architecture relationships inferred from naming and known platform roles — validate in chat against live code.",
+  "nodes": [
+    {
+      "id": "viaconsole",
+      "label": "VIA Console",
+      "layer": "admin",
+      "role": "Site manager / ops console for merchants, domains, content"
+    },
+    {
+      "id": "viamerchantapp2.0",
+      "label": "Merchant App",
+      "layer": "client",
+      "role": "Merchant-facing application"
+    },
+    {
+      "id": "viacore",
+      "label": "VIA Core",
+      "layer": "api",
+      "role": "Core backend services (leads, phone, SMS, business logic)"
+    },
+    {
+      "id": "viaassistant",
+      "label": "VIA Assistant",
+      "layer": "api",
+      "role": "Assistant / scheduling and conversational helpers"
+    },
+    {
+      "id": "viadomain",
+      "label": "VIA Domain",
+      "layer": "infra",
+      "role": "Domain / DNS / ingress related automation"
+    },
+    {
+      "id": "bhs",
+      "label": "BHS",
+      "layer": "product",
+      "role": "Business health score / insights product surface"
+    },
+    {
+      "id": "viagenai",
+      "label": "VIA GenAI",
+      "layer": "ai",
+      "role": "Generative AI services"
+    },
+    {
+      "id": "vianotificationcenter",
+      "label": "Notification Center",
+      "layer": "platform",
+      "role": "Notifications fan-out"
+    },
+    {
+      "id": "viasocketserver",
+      "label": "Socket Server",
+      "layer": "platform",
+      "role": "Realtime / websocket messaging"
+    },
+    {
+      "id": "viaphotolibrary",
+      "label": "Photo Library",
+      "layer": "media",
+      "role": "Image ingest, tagging, search"
+    },
+    {
+      "id": "viavideos",
+      "label": "VIA Videos",
+      "layer": "media",
+      "role": "Video / avatar generation studio"
+    }
+  ],
+  "edges": [
+    { "from": "viaconsole", "to": "viacore", "label": "manages / calls APIs" },
+    { "from": "viamerchantapp2.0", "to": "viacore", "label": "merchant API traffic" },
+    { "from": "viamerchantapp2.0", "to": "viasocketserver", "label": "realtime updates" },
+    { "from": "viacore", "to": "vianotificationcenter", "label": "notify events" },
+    { "from": "viacore", "to": "viasocketserver", "label": "push realtime" },
+    { "from": "viaassistant", "to": "viacore", "label": "shared domain / leads" },
+    { "from": "viaconsole", "to": "viadomain", "label": "domain ops" },
+    { "from": "bhs", "to": "viacore", "label": "score inputs / APIs" },
+    { "from": "viagenai", "to": "viacore", "label": "AI features for core flows" },
+    { "from": "viaphotolibrary", "to": "viaconsole", "label": "console media tools" },
+    { "from": "viavideos", "to": "viagenai", "label": "gen media pipeline" },
+    { "from": "viavideos", "to": "viaconsole", "label": "admin / content workflows" }
+  ]
+}

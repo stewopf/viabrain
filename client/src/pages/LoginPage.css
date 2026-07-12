@@ -1,0 +1,244 @@
+.splash {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(0, 42, 90, 0.9) 0%,
+      rgba(1, 53, 114, 0.74) 42%,
+      rgba(1, 65, 137, 0.52) 100%
+    ),
+    url("/images/loginHero.jpg") center center / cover no-repeat;
+}
+
+.splash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      120% 140% at 100% 0%,
+      rgba(140, 237, 30, 0.18) 0%,
+      rgba(140, 237, 30, 0) 48%
+    ),
+    linear-gradient(
+      to right,
+      rgba(1, 53, 114, 0.55) 0%,
+      rgba(1, 53, 114, 0.2) 45%,
+      transparent 78%
+    );
+  pointer-events: none;
+}
+
+.splash-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem;
+}
+
+.splash-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #fff;
+}
+
+.splash-logo-mark {
+  width: 32px;
+  height: 32px;
+}
+
+.splash-logo-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(226, 237, 254, 0.7);
+}
+
+.splash-main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1.75rem 4.5rem;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.splash-copy {
+  max-width: 26rem;
+  width: 100%;
+}
+
+.splash-kicker {
+  margin: 0 0 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--opf-accent);
+}
+
+.splash-kicker::before {
+  content: "";
+  width: 1.35rem;
+  height: 2px;
+  background: var(--opf-accent);
+}
+
+.splash-brand {
+  margin: 0 0 0.65rem;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.splash-sub {
+  margin: 0 0 1.5rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: rgba(226, 237, 254, 0.88);
+  max-width: 24rem;
+}
+
+.splash-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(226, 237, 254, 0.55);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.35rem 1.4rem;
+  box-shadow: 0 18px 48px -20px rgba(0, 24, 56, 0.55);
+  color: var(--opf-navy);
+}
+
+.splash-card label {
+  margin-top: 0.65rem;
+}
+
+.splash-card label:first-of-type {
+  margin-top: 0;
+}
+
+.splash-cta {
+  margin-top: 1.15rem;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.35rem 0.4rem 0.35rem 1.25rem;
+  border: 0;
+  border-radius: 48px;
+  background: var(--opf-accent);
+  color: var(--opf-navy-deepest);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.splash-cta:hover:not(:disabled) {
+  background: var(--opf-accent-hover);
+  transform: translateY(-1px);
+}
+
+.splash-cta:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.splash-cta-pointer {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--opf-navy);
+  font-size: 0.95rem;
+}
+
+.splash-card .error-banner {
+  margin-top: 0.85rem;
+}
+
+.okta-cta {
+  text-decoration: none;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0 0.35rem;
+  color: var(--opf-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--gray-200);
+}
+
+@media (max-width: 640px) {
+  .splash-top {
+    padding: 1rem 1.15rem;
+  }
+
+  .splash-logo-label {
+    display: none;
+  }
+
+  .splash-main {
+    padding: 1.5rem 1.15rem 3rem;
+    align-items: flex-end;
+  }
+
+  .splash-copy {
+    max-width: none;
+  }
+
+  .splash-sub {
+    font-size: 0.95rem;
+  }
+
+  .splash-card {
+    padding: 1.1rem 1.1rem 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .splash-brand {
+    font-size: 1.85rem;
+  }
+}

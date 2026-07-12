@@ -1,0 +1,75 @@
+.playbook-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.playbook-repos {
+  padding: 1rem;
+}
+
+.playbook-repo-grid {
+  max-height: none;
+  overflow: visible;
+}
+
+.playbook-count {
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+}
+
+.playbook-group h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+}
+
+.playbook-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.playbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 0.85rem;
+}
+
+.playbook-card h3 {
+  font-size: 1rem;
+  font-weight: 750;
+  margin-bottom: 0.4rem;
+}
+
+.playbook-card .muted {
+  margin-bottom: 1rem;
+  min-height: 2.8rem;
+}
+
+@media (min-width: 1000px) {
+  .playbook-layout {
+    grid-template-columns: 300px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .playbook-repos {
+    position: sticky;
+    top: calc(var(--nav-h) + 1.25rem);
+  }
+
+  .playbook-repo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .playbook-card .muted {
+    min-height: 0;
+  }
+
+  .playbook-card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

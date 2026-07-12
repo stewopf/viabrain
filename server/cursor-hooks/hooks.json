@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "./hooks/pre-tool-use.mjs"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "./hooks/before-shell.mjs"
+      }
+    ]
+  }
+}
