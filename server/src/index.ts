@@ -21,9 +21,13 @@ async function main() {
   startRepoSyncCron();
 
   const app = express();
+  // Needed when TLS is terminated at an AWS ALB / nginx proxy.
+  app.set("trust proxy", 1);
   app.use(
     cors({
-      origin: env.clientOrigin,
+      // Reflect the browser Origin so cookies work whether you open the
+      // public IP, DNS name, or localhost — CLIENT_ORIGIN alone is too brittle on AWS.
+      origin: true,
       credentials: true,
     }),
   );
@@ -31,7 +35,11 @@ async function main() {
   app.use(cookieParser());
 
   app.get("/api/health", (_req, res) => {
-    res.json({ ok: true });
+    res.json({
+      ok: true,
+      cookieSecure: env.cookieSecure,
+      clientOrigin: env.clientOrigin,
+    });
   });
 
   app.use("/api/auth", authRouter);
@@ -57,8 +65,11 @@ async function main() {
     },
   );
 
-  frontend.listen(env.port, () => {
-    console.log(`[via-project] listening on http://localhost:${env.port}`);
+  frontend.listen(env.port, "0.0.0.0", () => {
+    console.log(`[via-project] listening on http://0.0.0.0:${env.port}`);
+    console.log(
+      `[auth] clientOrigin=${env.clientOrigin} cookieSecure=${env.cookieSecure}`,
+    );
   });
 }
 

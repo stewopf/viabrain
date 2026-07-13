@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, type Playbook, type PlaybookSummary, type Repo } from "../api";
+import {
+  loadSelectedRepoIds,
+  saveSelectedRepoIds,
+} from "../selectedRepos";
 import "./ChatsPage.css";
 import "./PlaybooksPage.css";
 
@@ -24,12 +28,19 @@ export function PlaybooksPage() {
         ]);
         setPlaybooks(pb);
         setRepos(repoList);
-        setSelectedRepoIds(repoList.map((r) => r.id));
+        setSelectedRepoIds(
+          loadSelectedRepoIds(repoList.map((r) => r.id)),
+        );
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load");
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (repos.length === 0) return;
+    saveSelectedRepoIds(selectedRepoIds);
+  }, [selectedRepoIds, repos.length]);
 
   const byCategory = useMemo(() => {
     const map = new Map<string, PlaybookSummary[]>();

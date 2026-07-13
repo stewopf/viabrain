@@ -5,7 +5,6 @@ import { User } from "../models/User.js";
 import {
   clearAuthCookie,
   optionalAuth,
-  requireAuth,
   setAuthCookie,
   signToken,
 } from "../middleware/auth.js";
@@ -30,7 +29,7 @@ function oauthCookieOptions() {
   return {
     httpOnly: true,
     sameSite: "lax" as const,
-    secure: process.env.NODE_ENV === "production",
+    secure: env.cookieSecure,
     maxAge: 10 * 60 * 1000,
     path: "/",
   };
@@ -93,8 +92,12 @@ authRouter.post("/logout", optionalAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-authRouter.get("/me", requireAuth, (req, res) => {
-  res.json({ id: req.user!.id, username: req.user!.username });
+authRouter.get("/me", optionalAuth, (req, res) => {
+  if (!req.user) {
+    res.status(200).json(null);
+    return;
+  }
+  res.json({ id: req.user.id, username: req.user.username });
 });
 
 authRouter.get("/okta/start", (req, res) => {

@@ -9,9 +9,9 @@ function isApiPath(urlPath: string): boolean {
 }
 
 /** Vite middleware mode for local development (not used in production). */
-export async function attachViteFrontend(
-  app: Express,
-): Promise<{ listen: (port: number, cb?: () => void) => Server }> {
+export async function attachViteFrontend(app: Express): Promise<{
+  listen: (port: number, host?: string, cb?: () => void) => Server;
+}> {
   const clientRoot = path.join(env.root, "client");
   const httpServer = createHttpServer(app);
   const [{ createServer: createViteServer }, reactPlugin] = await Promise.all([
@@ -46,7 +46,10 @@ export async function attachViteFrontend(
   });
 
   return {
-    listen(port, cb) {
+    listen(port, hostOrCb, maybeCb) {
+      const host = typeof hostOrCb === "string" ? hostOrCb : undefined;
+      const cb = typeof hostOrCb === "function" ? hostOrCb : maybeCb;
+      if (host) return httpServer.listen(port, host, cb);
       return httpServer.listen(port, cb);
     },
   };

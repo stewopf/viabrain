@@ -10,6 +10,7 @@ const links = [
   { to: "/repos", label: "Repos" },
   { to: "/readmes", label: "READMEs" },
   { to: "/audit", label: "Audit" },
+  { to: "/help", label: "Help" },
 ] as const;
 
 export function AppShell() {

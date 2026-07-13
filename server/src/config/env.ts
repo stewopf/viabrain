@@ -7,14 +7,29 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../../..");
 
 dotenv.config({ path: path.join(root, ".env") });
+// Also allow env from the process environment / cwd .env (systemd, AWS, etc.)
+dotenv.config();
 
 function required(name: string, fallback?: string): string {
-  const value = process.env[name] ?? fallback;
+  const value = (process.env[name] ?? fallback)?.trim();
   if (!value) {
     throw new Error(`Missing required env var: ${name}`);
   }
   return value;
 }
+
+function boolEnv(name: string): boolean | undefined {
+  const raw = process.env[name]?.trim().toLowerCase();
+  if (raw === "true" || raw === "1" || raw === "yes") return true;
+  if (raw === "false" || raw === "0" || raw === "no") return false;
+  return undefined;
+}
+
+const clientOrigin =
+  process.env.CLIENT_ORIGIN?.trim() ||
+  `http://localhost:${Number(process.env.PORT ?? 4000)}`;
+
+const cookieSecureOverride = boolEnv("COOKIE_SECURE");
 
 export const env = {
   root,
@@ -23,18 +38,22 @@ export const env = {
   jwtSecret: required("JWT_SECRET", "dev-only-change-me"),
   adminUsername: required("ADMIN_USERNAME", "admin"),
   adminPassword: required("ADMIN_PASSWORD", "changeme"),
-  cursorApiKey: process.env.CURSOR_API_KEY ?? "",
+  cursorApiKey: process.env.CURSOR_API_KEY?.trim() ?? "",
   reposRoot: path.resolve(root, process.env.REPOS_ROOT ?? "./repos"),
   reposConfigPath: path.join(root, "config", "repos.json"),
   playbooksConfigPath: path.join(root, "config", "playbooks.json"),
   repoMapConfigPath: path.join(root, "config", "repo-map.json"),
-  clientOrigin:
-    process.env.CLIENT_ORIGIN ??
-    `http://localhost:${Number(process.env.PORT ?? 4000)}`,
+  clientOrigin,
+  /**
+   * Auth cookies use Secure only for HTTPS public origins.
+   * Override with COOKIE_SECURE=true|false if needed (e.g. TLS terminated at a proxy).
+   */
+  cookieSecure:
+    cookieSecureOverride ?? clientOrigin.startsWith("https://"),
   cronSync: process.env.CRON_SYNC ?? "0 2 * * *",
   cursorHome: path.resolve(root, process.env.CURSOR_HOME ?? "./.cursor-home"),
   postLoginRedirect:
     process.env.OKTA_POST_LOGIN_REDIRECT?.trim() ||
-    process.env.CLIENT_ORIGIN ||
+    clientOrigin ||
     `http://localhost:${Number(process.env.PORT ?? 4000)}/`,
 };

@@ -25,14 +25,18 @@ export function setAuthCookie(res: Response, token: string): void {
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: env.cookieSecure,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   });
 }
 
 export function clearAuthCookie(res: Response): void {
-  res.clearCookie(COOKIE_NAME, { path: "/" });
+  res.clearCookie(COOKIE_NAME, {
+    path: "/",
+    sameSite: "lax",
+    secure: env.cookieSecure,
+  });
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {

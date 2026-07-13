@@ -9,6 +9,7 @@ import {
 } from "../api";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { MarkdownBody } from "../components/MarkdownBody";
+import { saveSelectedRepoIds } from "../selectedRepos";
 import "./ChatsPage.css";
 
 function formatRepoIds(repoIds: string[] | undefined): string {
@@ -33,8 +34,28 @@ export function ChatsPage() {
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<Chat | null>(null);
+  const [deleteAllOpen, setDeleteAllOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [headerCollapsed, setHeaderCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem("viabrain.chatHeaderCollapsed") === "1";
+    } catch {
+      return false;
+    }
+  });
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  function toggleHeaderCollapsed() {
+    setHeaderCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("viabrain.chatHeaderCollapsed", next ? "1" : "0");
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }
 
   const activeChat = useMemo(
     () => chats.find((c) => c.id === activeId) ?? null,
@@ -60,13 +81,19 @@ export function ChatsPage() {
         ]);
         setChats(chatList);
         setRepos(repoList);
-        setSelectedRepoIds(repoList.map((r) => r.id));
 
         const navState = location.state as
           | { openChatId?: string; autoPrompt?: string }
           | null;
         if (navState?.openChatId) {
+          const opened =
+            chatList.find((c) => c.id === navState.openChatId) ?? null;
           setActiveId(navState.openChatId);
+          setSelectedRepoIds(
+            opened?.repoIds?.length
+              ? opened.repoIds
+              : repoList.map((r) => r.id),
+          );
           navigate(location.pathname, { replace: true, state: null });
           if (navState.autoPrompt) {
             window.setTimeout(() => {
@@ -75,6 +102,13 @@ export function ChatsPage() {
           }
         } else if (chatList[0]) {
           setActiveId(chatList[0].id);
+          setSelectedRepoIds(
+            chatList[0].repoIds?.length
+              ? chatList[0].repoIds
+              : repoList.map((r) => r.id),
+          );
+        } else {
+          setSelectedRepoIds(repoList.map((r) => r.id));
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load");
@@ -82,6 +116,16 @@ export function ChatsPage() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!activeChat?.repoIds?.length) return;
+    setSelectedRepoIds(activeChat.repoIds);
+  }, [activeChat?.id]);
+
+  useEffect(() => {
+    if (selectedRepoIds.length === 0 && repos.length === 0) return;
+    saveSelectedRepoIds(selectedRepoIds);
+  }, [selectedRepoIds, repos.length]);
 
   async function createChat() {
     if (selectedRepoIds.length === 0) return;
@@ -227,6 +271,23 @@ export function ChatsPage() {
     }
   }
 
+  async function confirmDeleteAllChats() {
+    setDeleting(true);
+    setError(null);
+    try {
+      await api.deleteAllChats();
+      setChats([]);
+      setActiveId(null);
+      setMessages([]);
+      setDeleteAllOpen(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete all failed");
+      setDeleteAllOpen(false);
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   return (
     <div className="console-content wide chats-layout">
       <ConfirmDialog
@@ -247,9 +308,33 @@ export function ChatsPage() {
           if (!deleting) void confirmDeleteChat();
         }}
       />
+      <ConfirmDialog
+        open={deleteAllOpen}
+        title="Delete all chats?"
+        message={`Permanently remove ${chats.length} chat${chats.length === 1 ? "" : "s"} and all message history. This cannot be undone.`}
+        confirmLabel={deleting ? "Deleting…" : "Delete all"}
+        cancelLabel="Keep chats"
+        danger
+        onCancel={() => {
+          if (!deleting) setDeleteAllOpen(false);
+        }}
+        onConfirm={() => {
+          if (!deleting) void confirmDeleteAllChats();
+        }}
+      />
       <aside className="chat-sidebar card">
         <div className="chat-sidebar-head">
-          <h2>Chats</h2>
+          <div className="chat-sidebar-title-row">
+            <h2>Chats</h2>
+            <button
+              type="button"
+              className="linkish chat-delete-all"
+              disabled={chats.length === 0 || deleting}
+              onClick={() => setDeleteAllOpen(true)}
+            >
+              Delete all
+            </button>
+          </div>
           <div className="repo-picker">
             <div className="repo-picker-toolbar">
               <span className="repo-picker-label">Repositories</span>
@@ -295,10 +380,9 @@ export function ChatsPage() {
               )}
             </div>
             <p className="repo-picker-hint muted">
-              {selectedRepoIds.length} selected
-              {selectedRepoIds.length > 1
-                ? " — prompts will consider all of them"
-                : ""}
+              {activeChat
+                ? `Active chat: ${formatRepoIds(activeChat.repoIds)}. Selection below is for New chat.`
+                : `${selectedRepoIds.length} selected for New chat`}
             </p>
             <button
               type="button"
@@ -367,50 +451,64 @@ export function ChatsPage() {
       </aside>
 
       <section className="chat-main">
-        <div className="builder-hero">
+        <div
+          className={`builder-hero chat-hero${headerCollapsed ? " is-collapsed" : ""}`}
+        >
           <div className="builder-hero-left">
             <p className="builder-hero-kicker">Ask only · Read only</p>
             <h1 className="builder-hero-title">
               {activeChat ? activeChat.title : "Code chat"}
             </h1>
-            <p className="builder-hero-sub">
-              {activeChat
-                ? `Exploring ${formatRepoIds(activeChat.repoIds)}${
-                    activeChat.repoIds.length > 1
-                      ? " together"
-                      : ""
-                  } without modifying the filesystem.`
-                : "Select one or more synced repositories, then create a chat."}
-            </p>
-            <div
-              className="mode-lock"
-              title="VIA Project is permanently Ask / read-only. Mode cannot be changed."
-            >
-              <span className="mode-lock-dot" aria-hidden />
-              <span>Ask · Read only</span>
-              <span className="mode-lock-badge">Locked</span>
-            </div>
-            {activeChat && (
-              <div className="builder-hero-actions chat-export-actions">
-                <a
-                  className="builder-hero-btn ghost"
-                  href={api.exportMemoUrl(activeChat.id, "md")}
+            {!headerCollapsed && (
+              <>
+                <p className="builder-hero-sub">
+                  {activeChat
+                    ? `Exploring ${formatRepoIds(activeChat.repoIds)}${
+                        activeChat.repoIds.length > 1 ? " together" : ""
+                      } without modifying the filesystem.`
+                    : "Select one or more synced repositories, then create a chat."}
+                </p>
+                <div
+                  className="mode-lock"
+                  title="VIA Project is permanently Ask / read-only. Mode cannot be changed."
                 >
-                  Export memo
-                  <span className="builder-hero-btn-pointer">↓</span>
-                </a>
-                <a
-                  className="builder-hero-btn primary"
-                  href={api.exportMemoUrl(activeChat.id, "html")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Print / PDF
-                  <span className="builder-hero-btn-pointer">→</span>
-                </a>
-              </div>
+                  <span className="mode-lock-dot" aria-hidden />
+                  <span>Ask · Read only</span>
+                  <span className="mode-lock-badge">Locked</span>
+                </div>
+                {activeChat && (
+                  <div className="builder-hero-actions chat-export-actions">
+                    <a
+                      className="builder-hero-btn ghost"
+                      href={api.exportMemoUrl(activeChat.id, "md")}
+                    >
+                      Export memo
+                      <span className="builder-hero-btn-pointer">↓</span>
+                    </a>
+                    <a
+                      className="builder-hero-btn primary"
+                      href={api.exportMemoUrl(activeChat.id, "html")}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Print / PDF
+                      <span className="builder-hero-btn-pointer">→</span>
+                    </a>
+                  </div>
+                )}
+              </>
             )}
           </div>
+          <button
+            type="button"
+            className="chat-hero-toggle"
+            onClick={toggleHeaderCollapsed}
+            aria-expanded={!headerCollapsed}
+            title={headerCollapsed ? "Expand header" : "Collapse header"}
+          >
+            {headerCollapsed ? "Expand" : "Collapse"}
+            <span aria-hidden>{headerCollapsed ? "▾" : "▴"}</span>
+          </button>
         </div>
 
         <div className="card chat-panel">

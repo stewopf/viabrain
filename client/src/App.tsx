@@ -3,6 +3,7 @@ import { useAuth } from "./auth";
 import { AppShell } from "./components/AppShell";
 import { AuditPage } from "./pages/AuditPage";
 import { ChatsPage } from "./pages/ChatsPage";
+import { HelpPage } from "./pages/HelpPage";
 import { LoginPage } from "./pages/LoginPage";
 import { MapPage } from "./pages/MapPage";
 import { PlaybooksPage } from "./pages/PlaybooksPage";
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="repos" element={<ReposPage />} />
         <Route path="readmes" element={<ReadmesPage />} />
         <Route path="audit" element={<AuditPage />} />
+        <Route path="help" element={<HelpPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

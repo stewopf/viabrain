@@ -130,7 +130,7 @@ async function request<T>(
 
 export const api = {
   authConfig: () => request<AuthConfig>("/api/auth/config"),
-  me: () => request<User>("/api/auth/me"),
+  me: () => request<User | null>("/api/auth/me"),
   login: (username: string, password: string) =>
     request<User>("/api/auth/login", {
       method: "POST",
@@ -160,6 +160,10 @@ export const api = {
     }),
   deleteChat: (id: string) =>
     request<{ ok: boolean }>(`/api/chats/${id}`, { method: "DELETE" }),
+  deleteAllChats: () =>
+    request<{ ok: boolean; deleted: number }>("/api/chats", {
+      method: "DELETE",
+    }),
   listMessages: (chatId: string) =>
     request<Message[]>(`/api/chats/${chatId}/messages`),
   listPlaybooks: () => request<PlaybookSummary[]>("/api/playbooks"),

@@ -141,6 +141,25 @@ chatsRouter.patch("/:id", async (req, res) => {
   res.json(serializeChat(chat));
 });
 
+chatsRouter.delete("/", async (req, res) => {
+  const chats = await Chat.find({ userId: req.user!.id }).select("_id").lean();
+  const ids = chats.map((c) => c._id);
+  if (ids.length > 0) {
+    await Message.deleteMany({ chatId: { $in: ids } });
+    await Chat.deleteMany({ userId: req.user!.id });
+  }
+  await writeAudit({
+    req,
+    userId: req.user!.id,
+    username: req.user!.username,
+    action: "chat.deleteAll",
+    resourceType: "chat",
+    detail: { count: ids.length },
+    repoShas: [],
+  });
+  res.json({ ok: true, deleted: ids.length });
+});
+
 chatsRouter.delete("/:id", async (req, res) => {
   const chat = await Chat.findOneAndDelete({
     _id: req.params.id,

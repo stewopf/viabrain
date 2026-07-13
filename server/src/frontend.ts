@@ -10,7 +10,11 @@ function isApiPath(urlPath: string): boolean {
 }
 
 function attachStaticFrontend(app: Express): {
-  listen: (port: number, cb?: () => void) => Server;
+  listen: (
+    port: number,
+    host?: string,
+    cb?: () => void,
+  ) => Server;
 } {
   const dist = path.join(env.root, "client", "dist");
   app.use(express.static(dist, { index: false }));
@@ -22,16 +26,19 @@ function attachStaticFrontend(app: Express): {
     });
   });
   return {
-    listen(port, cb) {
+    listen(port, hostOrCb, maybeCb) {
+      const host = typeof hostOrCb === "string" ? hostOrCb : undefined;
+      const cb = typeof hostOrCb === "function" ? hostOrCb : maybeCb;
+      if (host) return app.listen(port, host, cb);
       return app.listen(port, cb);
     },
   };
 }
 
 /** Serve the React client from this same Express process. */
-export async function attachFrontend(
-  app: Express,
-): Promise<{ listen: (port: number, cb?: () => void) => Server }> {
+export async function attachFrontend(app: Express): Promise<{
+  listen: (port: number, host?: string, cb?: () => void) => Server;
+}> {
   const isProd = process.env.NODE_ENV === "production";
 
   if (isProd) {
