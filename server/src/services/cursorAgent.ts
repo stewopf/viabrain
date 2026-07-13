@@ -49,7 +49,7 @@ export async function runAskTurn(options: {
   const localOptions = {
     cwd,
     settingSources: [] as [],
-    sandboxOptions: { enabled: true },
+    sandboxOptions: { enabled: env.cursorSandboxEnabled },
   };
 
   const createOpts = {

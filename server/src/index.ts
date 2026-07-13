@@ -70,6 +70,7 @@ async function main() {
     console.log(
       `[auth] clientOrigin=${env.clientOrigin} cookieSecure=${env.cookieSecure}`,
     );
+    console.log(`[cursor] sandboxEnabled=${env.cursorSandboxEnabled}`);
   });
 }
 

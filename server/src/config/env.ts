@@ -39,6 +39,13 @@ export const env = {
   adminUsername: required("ADMIN_USERNAME", "admin"),
   adminPassword: required("ADMIN_PASSWORD", "changeme"),
   cursorApiKey: process.env.CURSOR_API_KEY?.trim() ?? "",
+  /**
+   * Local Cursor SDK sandbox. Not supported on many cloud hosts (e.g. AWS).
+   * Default: on in dev, off in production. Override with CURSOR_SANDBOX_ENABLED.
+   */
+  cursorSandboxEnabled:
+    boolEnv("CURSOR_SANDBOX_ENABLED") ??
+    process.env.NODE_ENV !== "production",
   reposRoot: path.resolve(root, process.env.REPOS_ROOT ?? "./repos"),
   reposConfigPath: path.join(root, "config", "repos.json"),
   playbooksConfigPath: path.join(root, "config", "playbooks.json"),
