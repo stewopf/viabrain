@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api, type RepoMap } from "../api";
+import { MermaidBlock } from "../components/MermaidBlock";
+import { repoMapToMermaid } from "./repoMapToMermaid";
 import "./MapPage.css";
 
 const LAYER_ORDER = [
@@ -46,6 +48,11 @@ export function MapPage() {
     return map.edges.filter((e) => e.from === activeId || e.to === activeId);
   }, [map, activeId]);
 
+  const diagram = useMemo(
+    () => (map ? repoMapToMermaid(map, activeId) : null),
+    [map, activeId],
+  );
+
   return (
     <div className="console-content">
       <section className="builder-hero">
@@ -62,6 +69,26 @@ export function MapPage() {
       </section>
 
       {error && <div className="error-banner">{error}</div>}
+
+      {diagram && (
+        <div className="card map-diagram">
+          <div className="map-diagram-header">
+            <h2>{activeId ? `Focus · ${activeId}` : "Architecture graph"}</h2>
+            {activeId && (
+              <button
+                type="button"
+                className="map-diagram-clear"
+                onClick={() => setActiveId(null)}
+              >
+                Show all
+              </button>
+            )}
+          </div>
+          <div className="mermaid-wrap map-mermaid">
+            <MermaidBlock chart={diagram} />
+          </div>
+        </div>
+      )}
 
       <div className="map-layout">
         <div className="map-layers">
@@ -91,7 +118,7 @@ export function MapPage() {
         <aside className="card map-edges">
           <h2>{activeId ? `Connections · ${activeId}` : "Connections"}</h2>
           {!activeId && (
-            <p className="muted">Select a service to see related edges.</p>
+            <p className="muted">Select a service to focus the graph.</p>
           )}
           {activeId && relatedEdges.length === 0 && (
             <p className="muted">No curated edges for this node.</p>

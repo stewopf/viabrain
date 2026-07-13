@@ -1,7 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import {
   api,
   streamMessage,
@@ -10,6 +8,7 @@ import {
   type Repo,
 } from "../api";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+import { MarkdownBody } from "../components/MarkdownBody";
 import "./ChatsPage.css";
 
 function formatRepoIds(repoIds: string[] | undefined): string {
@@ -423,9 +422,7 @@ export function ChatsPage() {
                 </div>
                 <div className="message-body markdown">
                   {m.role === "assistant" ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {m.content}
-                    </ReactMarkdown>
+                    <MarkdownBody>{m.content}</MarkdownBody>
                   ) : (
                     <p>{m.content}</p>
                   )}
@@ -451,9 +448,7 @@ export function ChatsPage() {
               <div className="message assistant">
                 <div className="message-role">VIA Project</div>
                 <div className="message-body markdown">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {streaming}
-                  </ReactMarkdown>
+                  <MarkdownBody>{streaming}</MarkdownBody>
                 </div>
               </div>
             )}

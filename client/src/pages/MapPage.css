@@ -5,11 +5,49 @@
   margin-top: 1rem;
 }
 
+.map-diagram {
+  margin-top: 1rem;
+}
+
+.map-diagram-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.map-diagram-header h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.map-diagram-clear {
+  border: 1px solid var(--gray-200);
+  background: var(--gray-50);
+  color: var(--opf-navy);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.map-diagram-clear:hover {
+  border-color: var(--opf-blue-light);
+  background: var(--opf-blue-xlight);
+}
+
+.map-mermaid {
+  margin: 0;
+  min-height: 220px;
+}
+
 .map-layers {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
 }
+
 
 .map-layer h2 {
   font-size: 0.75rem;

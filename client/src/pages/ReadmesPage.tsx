@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { api, type RepoReadme } from "../api";
+import { MarkdownBody } from "../components/MarkdownBody";
 import "./ReadmesPage.css";
 
 const ALL = "__all__";
@@ -119,9 +118,7 @@ export function ReadmesPage() {
                 )}
                 {r.content && (
                   <div className="markdown readme-body">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {r.content}
-                    </ReactMarkdown>
+                    <MarkdownBody>{r.content}</MarkdownBody>
                   </div>
                 )}
               </article>
