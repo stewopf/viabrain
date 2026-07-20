@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
+import { cookieSecureForRequest } from "../requestOrigin.js";
 
 export type AuthUser = {
   id: string;
@@ -21,21 +22,27 @@ export function signToken(user: AuthUser): string {
   return jwt.sign(user, env.jwtSecret, { expiresIn: "7d" });
 }
 
-export function setAuthCookie(res: Response, token: string): void {
+export function setAuthCookie(
+  res: Response,
+  token: string,
+  req: Request,
+): void {
+  const secure = cookieSecureForRequest(req);
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: env.cookieSecure,
+    secure,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   });
 }
 
-export function clearAuthCookie(res: Response): void {
+export function clearAuthCookie(res: Response, req: Request): void {
+  const secure = cookieSecureForRequest(req);
   res.clearCookie(COOKIE_NAME, {
     path: "/",
     sameSite: "lax",
-    secure: env.cookieSecure,
+    secure,
   });
 }
 

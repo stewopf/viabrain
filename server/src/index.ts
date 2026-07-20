@@ -13,6 +13,7 @@ import { playbooksRouter } from "./routes/playbooks.js";
 import { mapRouter } from "./routes/map.js";
 import { auditRouter } from "./routes/audit.js";
 import { attachFrontend } from "./frontend.js";
+import { requestOrigin } from "./requestOrigin.js";
 
 async function main() {
   await ensureCursorHome();
@@ -25,20 +26,21 @@ async function main() {
   app.set("trust proxy", 1);
   app.use(
     cors({
-      // Reflect the browser Origin so cookies work whether you open the
-      // public IP, DNS name, or localhost — CLIENT_ORIGIN alone is too brittle on AWS.
-      origin: true,
+      origin(origin, callback) {
+        // Echo any browser Origin (IP, DNS, etc.). Same-origin requests omit Origin.
+        callback(null, origin);
+      },
       credentials: true,
     }),
   );
   app.use(express.json({ limit: "1mb" }));
   app.use(cookieParser());
 
-  app.get("/api/health", (_req, res) => {
+  app.get("/api/health", (req, res) => {
     res.json({
       ok: true,
-      cookieSecure: env.cookieSecure,
-      clientOrigin: env.clientOrigin,
+      requestOrigin: requestOrigin(req),
+      cookieSecureOverride: env.cookieSecureOverride ?? null,
     });
   });
 
@@ -68,7 +70,7 @@ async function main() {
   frontend.listen(env.port, "0.0.0.0", () => {
     console.log(`[via-project] listening on http://0.0.0.0:${env.port}`);
     console.log(
-      `[auth] clientOrigin=${env.clientOrigin} cookieSecure=${env.cookieSecure}`,
+      `[auth] any-host mode; cookieSecureOverride=${env.cookieSecureOverride ?? "auto"}`,
     );
     console.log(`[cursor] sandboxEnabled=${env.cursorSandboxEnabled}`);
   });

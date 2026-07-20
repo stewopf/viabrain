@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
+import type { Request } from "express";
 import { env } from "../config/env.js";
+import { requestOrigin } from "../requestOrigin.js";
 
 export type OktaRuntimeConfig = {
   enabled: boolean;
@@ -17,14 +19,14 @@ function normalizeIssuer(raw: string): string {
   return `${trimmed}/oauth2/default`;
 }
 
-export function getOktaConfig(): OktaRuntimeConfig {
+export function getOktaConfig(req?: Request): OktaRuntimeConfig {
   const orgUrl = process.env.OKTA_ORG_URL?.trim() ?? "";
   const clientId = process.env.OKTA_CLIENT_ID?.trim() ?? "";
   const enabled = Boolean(orgUrl && clientId);
 
   const redirectUri =
     process.env.OKTA_REDIRECT_URI?.trim() ||
-    `${env.clientOrigin.replace(/\/$/, "")}/api/auth/okta/callback`;
+    `${(req ? requestOrigin(req) : env.clientOrigin).replace(/\/$/, "")}/api/auth/okta/callback`;
 
   return {
     enabled,

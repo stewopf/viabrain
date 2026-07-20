@@ -9,7 +9,11 @@ import {
   signToken,
 } from "../middleware/auth.js";
 import { writeAudit } from "../services/audit.js";
-import { env } from "../config/env.js";
+import {
+  cookieSecureForRequest,
+  postLoginRedirectFor,
+  requestOrigin,
+} from "../requestOrigin.js";
 import {
   buildAuthorizeUrl,
   createOAuthState,
@@ -25,11 +29,11 @@ const OKTA_STATE_COOKIE = "viabrain_okta_state";
 const OKTA_VERIFIER_COOKIE = "viabrain_okta_verifier";
 const OKTA_NONCE_COOKIE = "viabrain_okta_nonce";
 
-function oauthCookieOptions() {
+function oauthCookieOptions(req: import("express").Request) {
   return {
     httpOnly: true,
     sameSite: "lax" as const,
-    secure: env.cookieSecure,
+    secure: cookieSecureForRequest(req),
     maxAge: 10 * 60 * 1000,
     path: "/",
   };
@@ -69,7 +73,7 @@ authRouter.post("/login", async (req, res) => {
   }
 
   const token = signToken({ id: user._id.toString(), username: user.username });
-  setAuthCookie(res, token);
+  setAuthCookie(res, token, req);
   await writeAudit({
     req,
     userId: user._id.toString(),
@@ -88,7 +92,7 @@ authRouter.post("/logout", optionalAuth, async (req, res) => {
       action: "auth.logout",
     });
   }
-  clearAuthCookie(res);
+  clearAuthCookie(res, req);
   res.json({ ok: true });
 });
 
@@ -101,7 +105,7 @@ authRouter.get("/me", optionalAuth, (req, res) => {
 });
 
 authRouter.get("/okta/start", (req, res) => {
-  const config = getOktaConfig();
+  const config = getOktaConfig(req);
   if (!config.enabled) {
     res.status(503).json({
       error: "Okta SSO is not configured. Set OKTA_ORG_URL and OKTA_CLIENT_ID.",
@@ -112,7 +116,7 @@ authRouter.get("/okta/start", (req, res) => {
   const state = createOAuthState();
   const nonce = createOAuthState();
   const { verifier, challenge } = createPkcePair();
-  const opts = oauthCookieOptions();
+  const opts = oauthCookieOptions(req);
 
   res.cookie(OKTA_STATE_COOKIE, state, opts);
   res.cookie(OKTA_VERIFIER_COOKIE, verifier, opts);
@@ -123,7 +127,7 @@ authRouter.get("/okta/start", (req, res) => {
 });
 
 authRouter.get("/okta/callback", async (req, res) => {
-  const config = getOktaConfig();
+  const config = getOktaConfig(req);
   if (!config.enabled) {
     res.status(503).send("Okta SSO is not configured");
     return;
@@ -135,7 +139,7 @@ authRouter.get("/okta/callback", async (req, res) => {
 
   if (error) {
     res.redirect(
-      `${env.clientOrigin}/login?error=${encodeURIComponent(error)}`,
+      `${requestOrigin(req)}/login?error=${encodeURIComponent(error)}`,
     );
     return;
   }
@@ -148,12 +152,16 @@ authRouter.get("/okta/callback", async (req, res) => {
   res.clearCookie(OKTA_NONCE_COOKIE, { path: "/" });
 
   if (!code || !state || !expectedState || state !== expectedState || !verifier) {
-    res.redirect(`${env.clientOrigin}/login?error=invalid_oauth_state`);
+    res.redirect(`${requestOrigin(req)}/login?error=invalid_oauth_state`);
     return;
   }
 
   try {
-    const tokens = await exchangeCodeForTokens({ config, code, verifier });
+    const tokens = await exchangeCodeForTokens({
+      config: getOktaConfig(req),
+      code,
+      verifier,
+    });
     const claims = decodeIdTokenPayload(tokens.id_token);
     const username =
       claims.email ||
@@ -180,7 +188,7 @@ authRouter.get("/okta/callback", async (req, res) => {
       id: user._id.toString(),
       username: user.username,
     });
-    setAuthCookie(res, token);
+    setAuthCookie(res, token, req);
     await writeAudit({
       req,
       userId: user._id.toString(),
@@ -189,10 +197,10 @@ authRouter.get("/okta/callback", async (req, res) => {
       detail: { sub: claims.sub },
     });
 
-    res.redirect(env.postLoginRedirect);
+    res.redirect(postLoginRedirectFor(req));
   } catch (err) {
     console.error("[okta] callback failed", err);
-    res.redirect(`${env.clientOrigin}/login?error=okta_callback_failed`);
+    res.redirect(`${requestOrigin(req)}/login?error=okta_callback_failed`);
   }
 });
 
