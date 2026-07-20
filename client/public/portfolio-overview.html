@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIA Portfolio — Executive Overview</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --opf-navy: #013572;
+        --opf-navy-dark: #002a5a;
+        --opf-blue-ui: #0257b8;
+        --opf-blue-xlight: #e7f0fe;
+        --opf-accent: #8ced1e;
+        --opf-bg: #f7fafd;
+        --opf-border: #e2edfe;
+        --opf-text-muted: #6b7280;
+        --radius: 12px;
+        --radius-lg: 16px;
+        --shadow-sm: 0 1px 4px rgba(15, 23, 42, 0.08),
+          0 1px 2px rgba(15, 23, 42, 0.06);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Manrope, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--opf-navy);
+        background: var(--opf-bg);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 1.5rem 1.25rem 3rem;
+      }
+
+      .hero {
+        background: linear-gradient(
+          135deg,
+          var(--opf-navy) 0%,
+          var(--opf-navy-dark) 100%
+        );
+        color: #fff;
+        border-radius: var(--radius-lg);
+        padding: 2rem 1.75rem;
+        margin-bottom: 1.75rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .hero-kicker {
+        font-size: 0.72rem;
+        font-weight: 750;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--opf-accent);
+        margin-bottom: 0.65rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.55rem, 4vw, 2rem);
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 0.85rem;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 52rem;
+      }
+
+      .toc {
+        background: #fff;
+        border: 1px solid var(--opf-border);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.35rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .toc h2 {
+        font-size: 0.72rem;
+        font-weight: 750;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--opf-text-muted);
+        margin-bottom: 0.85rem;
+      }
+
+      .toc ol {
+        list-style: none;
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .toc a {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.45rem 0.55rem;
+        border-radius: 8px;
+        color: var(--opf-navy);
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.92rem;
+      }
+
+      .toc a:hover {
+        background: var(--opf-blue-xlight);
+        color: var(--opf-blue-ui);
+      }
+
+      .toc-num {
+        font-size: 0.72rem;
+        font-weight: 750;
+        color: var(--opf-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .slide {
+        background: #fff;
+        border: 1px solid var(--opf-border);
+        border-radius: var(--radius);
+        padding: 1.5rem 1.45rem;
+        margin-bottom: 1.25rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .slide h2 {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 0.55rem;
+        color: var(--opf-navy);
+      }
+
+      .slide .lede {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--opf-blue-ui);
+        margin-bottom: 1rem;
+      }
+
+      .slide h3 {
+        font-size: 0.78rem;
+        font-weight: 750;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--opf-text-muted);
+        margin: 1.1rem 0 0.55rem;
+      }
+
+      .slide ol {
+        padding-left: 1.25rem;
+      }
+
+      .slide li {
+        margin-bottom: 0.45rem;
+      }
+
+      .slide li strong {
+        font-weight: 700;
+      }
+
+      .meta {
+        margin-top: 1rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid var(--opf-border);
+        font-size: 0.88rem;
+        color: var(--opf-text-muted);
+      }
+
+      .meta strong {
+        color: var(--opf-navy);
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 750;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        margin-left: 0.35rem;
+        vertical-align: middle;
+      }
+
+      .badge-live {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .badge-emerging {
+        background: #fef9c3;
+        color: #854d0e;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 0.65rem 0.75rem;
+        border-bottom: 1px solid var(--opf-border);
+        vertical-align: top;
+      }
+
+      th {
+        font-size: 0.72rem;
+        font-weight: 750;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--opf-text-muted);
+        background: var(--opf-blue-xlight);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .closing {
+        border-left: 4px solid var(--opf-accent);
+      }
+
+      .closing ol {
+        padding-left: 1.25rem;
+      }
+
+      .closing li {
+        margin-bottom: 0.65rem;
+      }
+
+      .footer-note {
+        margin-top: 1.5rem;
+        font-size: 0.82rem;
+        color: var(--opf-text-muted);
+        text-align: center;
+      }
+
+      @media (min-width: 720px) {
+        .page {
+          padding: 2rem 1.5rem 3.5rem;
+        }
+
+        .toc ol {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .page {
+          max-width: none;
+          padding: 0;
+        }
+
+        .hero,
+        .slide,
+        .toc {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <p class="hero-kicker">Executive briefing</p>
+        <h1>VIA Portfolio Overview</h1>
+        <p>
+          VIA is a merchant operating platform—sites, leads, money, messaging,
+          and AI assistants—backed by institutional code memory, agent-driven
+          delivery, and ops tools built for non-engineers.
+        </p>
+      </header>
+
+      <nav class="toc" aria-label="Contents">
+        <h2>On this page</h2>
+        <ol>
+          <li>
+            <a href="#map"><span class="toc-num">01</span> Portfolio map</a>
+          </li>
+          <li>
+            <a href="#relic"><span class="toc-num">02</span> The Relic</a>
+          </li>
+          <li>
+            <a href="#automaton"><span class="toc-num">03</span> The Automaton</a>
+          </li>
+          <li>
+            <a href="#product"><span class="toc-num">04</span> Core product</a>
+          </li>
+          <li>
+            <a href="#ops"><span class="toc-num">05</span> Reporting &amp; ops</a>
+          </li>
+          <li>
+            <a href="#quality"><span class="toc-num">06</span> Quality &amp; automation</a>
+          </li>
+          <li>
+            <a href="#mobile"><span class="toc-num">07</span> Mobile experience</a>
+          </li>
+          <li>
+            <a href="#closing"><span class="toc-num">08</span> So what</a>
+          </li>
+        </ol>
+      </nav>
+
+      <section id="map" class="slide">
+        <h2>Portfolio map</h2>
+        <p class="lede">Six capability pillars across the VIA estate.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Pillar</th>
+              <th>Business meaning</th>
+              <th>Primary repos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>The Relic</strong></td>
+              <td>Ask anything about how our systems actually work</td>
+              <td><code>viabrain</code> (+ ops <code>/brain</code>)</td>
+            </tr>
+            <tr>
+              <td><strong>The Automaton</strong></td>
+              <td>Turn intent (a ticket) into shipped change</td>
+              <td><code>sdlc-agent</code></td>
+            </tr>
+            <tr>
+              <td><strong>Core product</strong></td>
+              <td>Run the merchant business—not just a website</td>
+              <td>
+                <code>viamerchantapp2.0</code>, <code>viaconsole</code>,
+                <code>viacore</code>, <code>viaassistant</code>, + platform
+                services
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Reporting &amp; ops</strong></td>
+              <td>See health and move releases without deep engineering</td>
+              <td><code>viaopsdashboard</code>, <code>bhs</code></td>
+            </tr>
+            <tr>
+              <td><strong>Quality &amp; automation</strong></td>
+              <td>Ship with tests, promotion, and agent pipelines—not heroics</td>
+              <td>CI across apps, ops promote, <code>sdlc-agent</code></td>
+            </tr>
+            <tr>
+              <td><strong>Mobile experience</strong></td>
+              <td>Meet merchants where they are (phone-first)</td>
+              <td><code>bhs</code> live; broader mobile still TBD</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="relic" class="slide">
+        <h2>The Relic</h2>
+        <p class="lede">
+          Your product knowledge lives in a queryable system grounded in the
+          real codebase.
+        </p>
+        <h3>Three fundamental things it provides</h3>
+        <ol>
+          <li>
+            Answers grounded in the actual multi-repo codebase—not tribal memory
+          </li>
+          <li>
+            On-demand and nightly sync so “what’s true” stays current with
+            <code>main</code>
+          </li>
+          <li>
+            Safe, read-only exploration so leaders and builders can ask without
+            risking production code
+          </li>
+        </ol>
+        <p class="meta">
+          <strong>Evidence:</strong> <code>viabrain</code> (11-repo catalog;
+          Cursor plan-mode agents) ·
+          <strong>Maturity:</strong>
+          <span class="badge badge-live">Live</span>
+        </p>
+      </section>
+
+      <section id="automaton" class="slide">
+        <h2>The Automaton</h2>
+        <p class="lede">
+          A specialist-agent pipeline that turns a Jira ticket into
+          implementation, review, and a pull request.
+        </p>
+        <h3>Three fundamental things it provides</h3>
+        <ol>
+          <li>
+            End-to-end delivery chain: analyze → design → build → test → review →
+            fix → document → PR / Jira update
+          </li>
+          <li>
+            Choice of execution engine (Claude Code or Cursor) per
+            pipeline—adaptable to how the team works
+          </li>
+          <li>
+            Throughput leverage: specialists do the mechanical SDLC work so
+            humans decide, not grind
+          </li>
+        </ol>
+        <p class="meta">
+          <strong>Evidence:</strong> <code>sdlc-agent</code> (14 specialist
+          agents; PR creator noted as still completing) ·
+          <strong>Maturity:</strong>
+          <span class="badge badge-emerging">Emerging</span>
+        </p>
+      </section>
+
+      <section id="product" class="slide">
+        <h2>Core product platform</h2>
+        <p class="lede">
+          A full merchant OS that outgrew website origins—acquire, schedule,
+          invoice, message, get paid, and get help in one place.
+        </p>
+        <h3>Three fundamental things it provides</h3>
+        <ol>
+          <li>
+            Merchant day-to-day operations: leads, calendar, estimates/invoices,
+            payments, messaging, and site management
+          </li>
+          <li>
+            Platform backbone: onboarding, site publishing, domains,
+            SMS/mail/payments integrations, and real-time messaging
+          </li>
+          <li>
+            In-product AI help that acts—schedule, invoice, estimate, walk
+            through the product—not just chat
+          </li>
+        </ol>
+        <p class="meta">
+          <strong>Evidence:</strong> <code>viamerchantapp2.0</code>,
+          <code>viaconsole</code>, <code>viacore</code>,
+          <code>viaassistant</code>; supported by domain, genAI pages, sockets,
+          notifications, photo/video assets ·
+          <strong>Maturity:</strong>
+          <span class="badge badge-live">Live</span>
+        </p>
+      </section>
+
+      <section id="ops" class="slide">
+        <h2>Reporting &amp; operations</h2>
+        <p class="lede">
+          Visibility and control for business and ops teams without requiring
+          engineering to interpret every signal.
+        </p>
+        <h3>Three fundamental things it provides</h3>
+        <ol>
+          <li>
+            Release and environment control: promote builds, see environment
+            state, tag releases (GitOps/ECR)
+          </li>
+          <li>
+            Merchant financial clarity in plain language (Business Health Score
+            from bank data—listen, watch, or read)
+          </li>
+          <li>
+            Operational queues and metrics surfaces so ops can monitor work
+            without digging into services
+          </li>
+        </ol>
+        <p class="meta">
+          <strong>Evidence:</strong> <code>viaopsdashboard</code>,
+          <code>bhs</code> (embedded in merchant app) ·
+          <strong>Maturity:</strong>
+          <span class="badge badge-live">Live</span>
+        </p>
+      </section>
+
+      <section id="quality" class="slide">
+        <h2>Quality &amp; automation</h2>
+        <p class="lede">
+          Delivery is designed to be tested and promoted through repeatable
+          paths—not one-off heroics.
+        </p>
+        <h3>Three fundamental things it provides</h3>
+        <ol>
+          <li>
+            Automated test gates on core apps (unit/e2e patterns across merchant
+            app, assistant, BHS, and others)
+          </li>
+          <li>
+            Standard build → promote paths so environments move in a controlled
+            way
+          </li>
+          <li>
+            Agent-assisted quality in the delivery loop (test write/run, code +
+            security review, fixer)
+          </li>
+        </ol>
+        <p class="meta">
+          <strong>Evidence:</strong> GitHub <code>build</code> /
+          <code>promote</code> / <code>vitest</code> / <code>playwright</code>
+          workflows; <code>sdlc-agent</code> test &amp; review stages ·
+          <strong>Maturity:</strong>
+          <span class="badge badge-live">Live</span> (strong automation; not
+          fully hands-off end-to-end)
+        </p>
+      </section>
+
+      <section id="mobile" class="slide">
+        <h2>Mobile experience</h2>
+        <p class="lede">
+          A phone-first experience exists today for business health; a broader
+          native merchant mobile story is still being defined.
+        </p>
+        <h3>Three fundamental things it provides</h3>
+        <ol>
+          <li>
+            Mobile-first conversational Business Health Score (Spanish/English)
+            for micro-merchants
+          </li>
+          <li>
+            Multi-modal delivery of insights—listen, video, or read—on a small
+            screen
+          </li>
+          <li>
+            Intended path to a fuller field/mobile merchant experience
+            (explicitly TBD)
+          </li>
+        </ol>
+        <p class="meta">
+          <strong>Evidence:</strong> <code>bhs</code>; merchant app has
+          <code>native-app</code> / device-sync surfaces—scope still open ·
+          <strong>Maturity:</strong>
+          <span class="badge badge-emerging">Emerging</span> (BHS live; wider
+          mobile TBD)
+        </p>
+      </section>
+
+      <section id="closing" class="slide closing">
+        <h2>So what</h2>
+        <ol>
+          <li>
+            <strong>Today’s uniqueness:</strong> a merchant OS plus a queryable
+            code Relic and an agent Automaton—product, memory, and creation in
+            one portfolio.
+          </li>
+          <li>
+            <strong>Next leverage:</strong> harden Automaton → shipped PRs,
+            deepen assistant-driven merchant workflows, and decide the mobile bet
+            beyond BHS.
+          </li>
+          <li>
+            <strong>Still undefined:</strong> the full mobile/field experience
+            beyond conversational score—and how far “fully automated” delivery
+            should go before human gates.
+          </li>
+        </ol>
+      </section>
+
+      <p class="footer-note">
+        Source: <code>docs/executive-portfolio-overview.md</code> · Also
+        available at <code>/portfolio-overview.html</code>
+      </p>
+    </main>
+  </body>
+</html>

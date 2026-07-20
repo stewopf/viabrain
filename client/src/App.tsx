@@ -7,6 +7,7 @@ import { HelpPage } from "./pages/HelpPage";
 import { LoginPage } from "./pages/LoginPage";
 import { MapPage } from "./pages/MapPage";
 import { PlaybooksPage } from "./pages/PlaybooksPage";
+import { PortfolioPage } from "./pages/PortfolioPage";
 import { ReadmesPage } from "./pages/ReadmesPage";
 import { ReposPage } from "./pages/ReposPage";
 import "./pages/LoginPage.css";
@@ -38,7 +39,8 @@ export default function App() {
           </Protected>
         }
       >
-        <Route index element={<ChatsPage />} />
+        <Route index element={<PortfolioPage />} />
+        <Route path="chats" element={<ChatsPage />} />
         <Route path="playbooks" element={<PlaybooksPage />} />
         <Route path="map" element={<MapPage />} />
         <Route path="repos" element={<ReposPage />} />

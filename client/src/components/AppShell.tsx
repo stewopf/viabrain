@@ -4,7 +4,8 @@ import { useAuth } from "../auth";
 import { ViaBrainMark } from "./ViaBrainMark";
 
 const links = [
-  { to: "/", label: "Chats", end: true },
+  { to: "/", label: "Overview", end: true },
+  { to: "/chats", label: "Chats" },
   { to: "/playbooks", label: "Playbooks" },
   { to: "/map", label: "Map" },
   { to: "/repos", label: "Repos" },

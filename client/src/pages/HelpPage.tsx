@@ -82,7 +82,7 @@ export function HelpPage() {
           <section id="chats" className="help-section">
             <h2>Chats</h2>
             <p>
-              <Link to="/">Chats</Link> is the main workspace. The left column
+              <Link to="/chats">Chats</Link> is the main workspace. The left column
               picks repositories and lists conversations; the right column shows
               the active thread.
             </p>
