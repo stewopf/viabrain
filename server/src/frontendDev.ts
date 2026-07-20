@@ -26,6 +26,8 @@ export async function attachViteFrontend(app: Express): Promise<{
     plugins: [reactPlugin.default()],
     server: {
       middlewareMode: true,
+      // Allow EC2 IP / DNS hostnames (not just localhost) when running dev on a remote host.
+      allowedHosts: true,
       hmr: { server: httpServer },
     },
   });

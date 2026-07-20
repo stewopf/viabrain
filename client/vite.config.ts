@@ -7,11 +7,17 @@ export default defineConfig({
     // Used only when running `npm run dev:client` standalone.
     // The main app serves the client from Express on PORT.
     port: 5173,
+    host: true,
+    allowedHosts: true,
     proxy: {
       "/api": {
         target: "http://localhost:4000",
         changeOrigin: true,
       },
     },
+  },
+  preview: {
+    host: true,
+    allowedHosts: true,
   },
 });

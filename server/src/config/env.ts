@@ -50,10 +50,17 @@ export const env = {
   reposConfigPath: path.join(root, "config", "repos.json"),
   playbooksConfigPath: path.join(root, "config", "playbooks.json"),
   repoMapConfigPath: path.join(root, "config", "repo-map.json"),
-  /** Fallback when a request has no Host header (rare). */
   clientOrigin,
-  /** When set, forces Secure (or not) on auth cookies. Otherwise derived per request. */
-  cookieSecureOverride,
+  /**
+   * Auth cookies use Secure only for HTTPS public origins.
+   * Override with COOKIE_SECURE=true|false if needed (e.g. TLS terminated at a proxy).
+   */
+  cookieSecure:
+    cookieSecureOverride ?? clientOrigin.startsWith("https://"),
   cronSync: process.env.CRON_SYNC ?? "0 2 * * *",
   cursorHome: path.resolve(root, process.env.CURSOR_HOME ?? "./.cursor-home"),
+  postLoginRedirect:
+    process.env.OKTA_POST_LOGIN_REDIRECT?.trim() ||
+    clientOrigin ||
+    `http://localhost:${Number(process.env.PORT ?? 4000)}/`,
 };
